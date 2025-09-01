@@ -1,4 +1,4 @@
-"use clinet";
+"use client";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { use, useState } from "react";
@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ScrollBar } from "../ui/scroll-area";
 import {
+  Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -38,7 +39,7 @@ interface SidebarSectionProps {
 const ChatSidebar = () => {
   const chats = [{}];
   const pathname = usePathname();
-  const router = useRouter();
+  // const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const todayChats: Chat[] = [];
