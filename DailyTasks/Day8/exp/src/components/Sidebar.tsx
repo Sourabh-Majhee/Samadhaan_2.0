@@ -1,17 +1,13 @@
-import { keyframes, useTheme } from "@emotion/react";
+import { keyframes} from "@emotion/react";
 import styled from "@emotion/styled";
 import {
   AddRounded,
-  AdjustRounded,
-  BugReportRounded,
   CategoryRounded,
   DeleteForeverRounded,
   DownloadDoneRounded,
   Favorite,
-  FavoriteRounded,
   FiberManualRecord,
   GetAppRounded,
-  GitHub,
   InstallDesktopRounded,
   InstallMobileRounded,
   IosShareRounded,
@@ -19,7 +15,6 @@ import {
   PhoneIphoneRounded,
   PhonelinkRounded,
   SettingsRounded,
-  StarRounded,
   TaskAltRounded,
   ThumbUpRounded,
 } from "@mui/icons-material";
@@ -36,8 +31,6 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CustomDialogTitle, LogoutDialog, SettingsDialog } from ".";
-import bmcLogoLight from "../assets/bmc-logo-light.svg";
-import bmcLogo from "../assets/bmc-logo.svg";
 import { defaultUser } from "../constants/defaultUser";
 import { UserContext } from "../contexts/UserContext";
 import { fetchBMCInfo } from "../services/bmcApi";
@@ -54,21 +47,15 @@ export const ProfileSidebar = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
 
-  const [stars, setStars] = useState<number | null>(null);
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
-  const [issuesCount, setIssuesCount] = useState<number | null>(null);
 
-  const [bmcSupporters, setBmcSupporters] = useState<number | null>(null);
 
-  const theme = useTheme();
   const n = useNavigate();
 
   useEffect(() => {
     const fetchRepoInfo: () => Promise<void> = async () => {
-      const { repoData, branchData } = await fetchGitHubInfo();
-      setStars(repoData.stargazers_count);
+      const {  branchData } = await fetchGitHubInfo();
       setLastUpdate(branchData.commit.commit.committer.date);
-      setIssuesCount(repoData.open_issues_count);
     };
 
     const fetchBMC: () => Promise<void> = async () => {
@@ -76,7 +63,7 @@ export const ProfileSidebar = () => {
       const { supportersCount } = await fetchBMCInfo();
       // In case BMC api fails
       if (supportersCount > 0) {
-        setBmcSupporters(supportersCount);
+        console.log("error")
       } else {
         console.error("No BMC supporters found.");
       }
@@ -170,24 +157,7 @@ export const ProfileSidebar = () => {
     }
   };
 
-  // const avatarButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     if (e.repeat) return;
-  //     if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === "b") {
-  //       e.preventDefault();
-  //       if (open) {
-  //         setAnchorEl(null);
-  //       } else if (avatarButtonRef.current) {
-  //         setAnchorEl(avatarButtonRef.current);
-  //       }
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", handleKeyDown);
-  //   return () => document.removeEventListener("keydown", handleKeyDown);
-  // }, [open]);
 
   return (
     <Container>
@@ -295,59 +265,7 @@ export const ProfileSidebar = () => {
           </StyledMenuItem>
         </MenuLink>
 
-        <StyledDivider />
-
-        <MenuLink to="https://github.com/maciekt07/TodoApp">
-          <StyledMenuItem translate="no">
-            <GitHub className="GitHubIcon" /> &nbsp; Github{" "}
-            {stars && (
-              <Tooltip title={`${stars} stars on Github`}>
-                <MenuLabel clr="#ff9d00">
-                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <StarRounded style={{ fontSize: "18px" }} />
-                    &nbsp;{stars}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
-
-        <MenuLink to="https://github.com/maciekt07/TodoApp/issues/new">
-          <StyledMenuItem>
-            <BugReportRounded className="BugReportRoundedIcon" /> &nbsp; Report Issue{" "}
-            {Boolean(issuesCount || issuesCount === 0) && (
-              <Tooltip title={`${issuesCount} open issues`}>
-                <MenuLabel clr="#3bb61c">
-                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <AdjustRounded style={{ fontSize: "18px" }} />
-                    &nbsp;
-                    {issuesCount}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
-
-        <MenuLink to="https://www.buymeacoffee.com/maciekt07">
-          <StyledMenuItem className="bmcMenu">
-            <BmcIcon className="bmc-icon" src={theme.darkmode ? bmcLogoLight : bmcLogo} /> &nbsp;
-            Buy me a coffee{" "}
-            {bmcSupporters && (
-              <Tooltip title={`${bmcSupporters} supporters on Buy me a coffee`}>
-                <MenuLabel clr="#f93c58">
-                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <FavoriteRounded style={{ fontSize: "16px" }} />
-                    &nbsp;{bmcSupporters}
-                  </span>
-                </MenuLabel>
-              </Tooltip>
-            )}
-          </StyledMenuItem>
-        </MenuLink>
-
-        <StyledDivider />
+        
 
         {supportsPWA && !isAppInstalled && (
           <StyledMenuItem tabIndex={0} onClick={installPWA}>
@@ -704,11 +622,7 @@ const LogoText = styled.h2`
   }
 `;
 
-const BmcIcon = styled.img`
-  width: 1em;
-  height: 1em;
-  font-size: 1.5rem;
-`;
+
 
 const ProfileOptionsBottom = styled.div`
   margin-top: auto;
